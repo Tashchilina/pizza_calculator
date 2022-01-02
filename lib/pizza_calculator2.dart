@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(SwitchesScreen());
+void main() => runApp(const SwitchesScreen());
 
 class SwitchesScreen extends StatefulWidget {
   const SwitchesScreen({Key? key}) : super(key: key);
 
-
   @override
   _SwitchesScreenState createState() => _SwitchesScreenState();
 }
+
 enum sauce {hot, sweetandsour, cheese}
+enum dough {ordinary,thin}
+enum pizzasize {small, middle, big}
 
 class _SwitchesScreenState extends State<SwitchesScreen> {
   sauce? _sauce = sauce.hot;
   bool _checked = true;
+  dough? _dough = dough.ordinary;
+  pizzasize? _pizzasize = pizzasize.small;
+  int priceordinarysmall = 350;
+  int priceordinarymiddle = 380;
+  int priceordinarybig = 410;
+  int pricethinsmall = 370;
+  int pricethinmiddle = 400;
+  int pricethinbig = 430;
+  int pricemorecheese = 50;
+  int pricesauce = 50;
 
-  void _onsauceChange (sauce? value) {
+
+  void _onsauceChange(sauce? value) {
     setState(() {
-      _sauce=value;
+      _sauce = value;
     });
   }
 
@@ -27,175 +40,304 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
     });
   }
 
-         @override
-    Widget build(BuildContext context) {
-      const borderStyle = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(36)),
-        borderSide: BorderSide(
-            color: const Color(0xFFeceff1), width: 2),
-      );
-      return MaterialApp(
-        home: Scaffold(
-          body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 50),
-            child: SingleChildScrollView(
-              child: Column(children: [
-                SizedBox(height: 20,),
-                SizedBox(width: 230,
-                  height: 120,
-                  child: Image(image: AssetImage('assets/pizza 1.png')),),
-                SizedBox(height: 30,),
-                Text('Калькулятор пиццы', style: TextStyle(fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF000000)),
+  @override
+  Widget build(BuildContext context) {
+    const borderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(36)),
+      borderSide: BorderSide(color: Color(0xFFeceff1), width: 2),
+    );
+    return MaterialApp(
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const Align(
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    width: 230,
+                    height: 120,
+                    child: Image(image: AssetImage('assets/pizza 1.png')),
+                  ),
                 ),
-                SizedBox(height: 9,),
-                Text('Выберите параметры:', style: TextStyle(fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF000000)),),
-                SizedBox(height: 30,),
-                Container(width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Color(0xFFECEFF1),
-                      borderRadius: BorderRadius.circular(36)),
-                  child: Row(
-                      children: [
-                        Expanded(child: ElevatedButton(onPressed: (){},
-                           child: Text('Обычное тесто',
-                            style: TextStyle(
-                                fontSize: 16, color: Color(0xFFeceff4)),),
-                            style: ElevatedButton.styleFrom(
-                            primary: Color(0xFF0079D0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(36.0),
-                            ),
-                          ),
-                        )
-                         ),
-                        Expanded(child: ElevatedButton(onPressed: () {},
-                          child: Text('Тонкое тесто', style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromRGBO(0, 0, 0, 0.4)),),
-                          style: ElevatedButton.styleFrom(
-                            primary: Color(0xFFECEFF1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(36.0),
-                            ),
-                          ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text(
+                  'Калькулятор пиццы',
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF000000)),
+                ),
+                const SizedBox(
+                  height: 9,
+                ),
+                const Text(
+                  'Выберите параметры:',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF000000)),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Color(0xFFECEFF1), borderRadius: BorderRadius.circular(36)),
+                        child: Row(
+                            children: [
+                          Expanded(
+                              child:  GestureDetector(onTap: () {
+                                setState(() {
+                                  _dough = dough.ordinary;
+                                  int priceordinarysmall = 350;
+                                });
+                              },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF0079D0),
+                                    borderRadius: BorderRadius.circular(36)),
+                                  child: const Center(
+                                      child: Padding(padding:EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                                        child: Text('Обычное тесто',
+                                          style: TextStyle(fontSize: 16, color: Color(0xFFFFFFFF)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ),
+                              ),
+                              Expanded(
+                               child: GestureDetector(onTap: () {
+                                setState(() {
+                                  _dough = dough.thin;
+                                  int pricethinsmall = 370;
+                                });
+                                },
+                                child: const Center(
+                                  child:  Padding(padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                                    child: Text('Тонкое тесто',
+                                      style: TextStyle(fontSize: 16, color: Color.fromRGBO(0, 0, 0, 0.4)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ),
+                        ]),
+                      ),
+                      const SizedBox(
+                        height: 19,
+                      ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Размер:',
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF000000)),
                         ),
+                      ),
+                      const SizedBox(height: 5,),
+                      const TextField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Color(0xFFECEFF1),
+                          enabledBorder: borderStyle,
+                          focusedBorder: borderStyle,
                         ),
+                      ),
+                      const SizedBox(height: 10,),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Соус:',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF333333)),
+                        ),
+                      ),
+                     Padding(padding: const EdgeInsets.only(left: 6),
+                       child: Column(
+                        children: [
+                        GestureDetector(onTap: (){
+                          setState(() {
+                          _sauce = sauce.hot;
+                          });
+                          },
+                            child:Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:[
+                             const Text('Острый', textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontSize: 16, color: Color(0xFF333333)),),
+                             Radio <sauce>(
+                             value: sauce.hot,
+                             groupValue: _sauce,
+                             onChanged: _onsauceChange,
+                             activeColor: Color(0xFF5DB075),
+                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                               visualDensity: const VisualDensity(
+                                 horizontal: VisualDensity.minimumDensity,
+                                 vertical: VisualDensity.minimumDensity,),
+                             ),
+                            ]),
+                          ),
+                            const Divider(),
+                          ]),
+                        ),
+                     Padding(padding: const EdgeInsets.only(left: 6),
+                       child: Column(
+                        children: [
+                           GestureDetector(onTap: (){
+                            setState(() {
+                            _sauce = sauce.sweetandsour;
+                            });
+                            },
+                             child:Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:[
+                               const Text('Кисло-сладкий',
+                               textAlign: TextAlign.right,
+                              style: TextStyle(
+                              fontSize: 16, color: Color(0xFF333333)),),
+                              Radio<sauce>(
+                              value: sauce.sweetandsour,
+                             groupValue: _sauce,
+                                onChanged: _onsauceChange,
+                              activeColor: Color(0xFF5DB075),
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: const VisualDensity(
+                                  horizontal: VisualDensity.minimumDensity,
+                                  vertical: VisualDensity.minimumDensity,),
+                      ),
+                      ]),
+                           ),
+                        const Divider(),
+                   ]),
+                   ),
+                      Padding(padding: const EdgeInsets.only(left: 6),
+                        child: Column(
+                            children: [
+                            GestureDetector(onTap: (){
+                             setState(() {
+                             _sauce = sauce.cheese;
+                             });
+                             },
+                              child:Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children:[
+                               const Text('Сырный', textAlign: TextAlign.right, style: TextStyle(
+                              fontSize: 16, color: Color(0xFF333333)),),
+                               Radio<sauce>(
+                          value: sauce.cheese,
+                          groupValue: _sauce,
+                          onChanged: _onsauceChange,
+                        activeColor: Color(0xFF5DB075),
+                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                 visualDensity: const VisualDensity(
+                                   horizontal: VisualDensity.minimumDensity,
+                                   vertical: VisualDensity.minimumDensity,),
+                      ),
+                      ]),
+                            ),
+                          const Divider(),
                       ]),
                 ),
-                SizedBox(height: 19,),
-               Align(
-                alignment: Alignment.centerLeft,
-                child:Text('Размер:',  textDirection: TextDirection.ltr, style: TextStyle(fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF000000)),
-                ),
-              ),
-                SizedBox(height: 5,),
-                TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Color(0xFFECEFF1),
-                    enabledBorder: borderStyle,
-                    focusedBorder: borderStyle,
-                  ),
-                ),
-                SizedBox(height: 10,),
-               Align(
-                alignment: Alignment.centerLeft,
-                child:Text('Соус:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF333333)),
-                ),
-              ),
-                RadioListTile <sauce>(
-                    title: const Text('Острый', textAlign: TextAlign.right,
-                      style: TextStyle(
-                          fontSize: 16, color: Color(0xFF333333)),),
-                    value: sauce.hot,
-                    groupValue: _sauce,
-                    onChanged: _onsauceChange
-                ),
-                RadioListTile <sauce>(
-                    title: const Text(
-                      'Кисло-сладкий', textAlign: TextAlign.right,
-                      style: TextStyle(
-                          fontSize: 16, color: Color(0xFF333333)),),
-                    value: sauce.sweetandsour,
-                    groupValue: _sauce,
-                    onChanged: _onsauceChange
-                ),
-                RadioListTile <sauce>(
-                    title: const Text('Сырный', textAlign: TextAlign.right,
-                      style: TextStyle(
-                          fontSize: 16, color: Color(0xFF333333)),),
-                    value: sauce.cheese,
-                    groupValue: _sauce,
-                    onChanged: _onsauceChange
-                ),
-                SizedBox(height: 15,),
-                Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: SizedBox(width: 36, height: 34,
-                          child: Image(image: AssetImage('assets/cheese.png')),),
+                      const SizedBox(
+                        height: 15,
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: Text('Дополнительный сыр', style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: Color(0xFF263238)),),
-                      ),
-                      Expanded(
+                      Row(children: [
+                        const Expanded(
                           flex: 1,
-                          child: Switch(value: _checked, onChanged: (val) {
-                            setState(() {
-                              _checked = !_checked;
-                            });
-                          })
+                          child: SizedBox(
+                            width: 36,
+                            height: 34,
+                            child:
+                            Image(image: AssetImage('assets/cheese.png')),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 3,
+                          child: Text(
+                            'Дополнительный сыр',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF263238)),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: Switch(
+                                value: _checked,
+                                onChanged: (val) {
+                                  setState(() {
+                                    _checked = !_checked;
+                                  });
+                                })),
+                      ]),
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ] ),
-                SizedBox(height: 10,),
-               Align(
-                alignment: Alignment.centerLeft,
-                child:Text('Стоимость:', style: TextStyle(fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF000000)),
-                ),
-              ),
-                SizedBox(height: 10,),
-                TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Color(0xFFECEFF1),
-                    enabledBorder: borderStyle,
-                    focusedBorder: borderStyle,
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Стоимость:',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF000000)),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const TextField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Color(0xFFECEFF1),
+                          enabledBorder: borderStyle,
+                          focusedBorder: borderStyle,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: 154,
+                        height: 42,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Заказать',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFF0079D0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(36.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 30,),
-                SizedBox(width: 154, height: 42, child:
-                ElevatedButton(onPressed: () {},
-                  child: Text('Заказать', style: TextStyle(fontSize: 16),),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF0079D0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(36.0),
-                    ),
-                  ),
-                ),
-                ),
-                SizedBox(height: 30,),
               ],
             ),
           ),
         ),
-        ),
-      );
+      ),
+    );
   }
 }

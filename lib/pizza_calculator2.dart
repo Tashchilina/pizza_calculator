@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:second_case/global_theme.dart';
 import 'package:sliding_switch/sliding_switch.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 void main() => runApp(const SwitchesScreen());
 
@@ -14,16 +16,32 @@ enum sauce {hot, sweetandsour, cheese}
 enum dough {ordinary,thin}
 
 class _SwitchesScreenState extends State<SwitchesScreen> {
-  sauce? _sauce = sauce.hot;
-  bool _checked = true;
-  dough? _dough = dough.ordinary;
-  int ordinary = 350;
-  int thin = 370;
-  int currentRangeValues = 30;
-  int currentRangeValues2 = 50;
-  int currentRangeValues3 = 70;
-  int cheese = 50;
-  RangeValues _currentRangeValues = const RangeValues(0, 60);
+  bool _checked = true; //  сыр
+  bool _isThinDough = false;//тесто
+  sauce? _sauce = sauce.hot; //соус
+   double _pizzaSize = 40; //размер
+   int _cost = 150;
+   int _calcCost(){
+     _cost = _pizzaSize.round()+150;
+     if (_isThinDough==true)_cost+=70;
+     if (_checked==true)_cost+=90;
+
+     switch(_sauce){
+       case sauce.hot:
+         _cost+=30;
+         break;
+       case sauce.sweetandsour:
+         _cost+=50;
+         break;
+       case sauce.cheese:
+         _cost+=70;
+         break;
+       case null:
+         _sauce=sauce.hot;
+         break;
+     }
+     return _cost;
+    }
 
 
   void _onsauceChange(sauce? value) {
@@ -44,6 +62,7 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
       borderSide: BorderSide(color: Color(0xFFeceff1), width: 2),
     );
     return MaterialApp(
+      theme: globalTheme(),
       home: Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
@@ -60,22 +79,20 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Text(
+                 const Text(
                   'Калькулятор пиццы',
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF000000)),
+                      color: Color(0xFF000000),
+                  ),
                 ),
                 const SizedBox(
                   height: 9,
                 ),
-                const Text(
+                Text(
                   'Выберите параметры:',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF000000)),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 const SizedBox(
                   height: 30,
@@ -84,7 +101,8 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                     padding: const EdgeInsets.only(left: 10,right: 10),
                     child: Column(
                       children: [
-                        Container(                            width: double.infinity,
+                        Container(
+                          width: double.infinity,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(36)),
                              child: Center(
@@ -94,28 +112,23 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                                      value: false,
                                      width: 380,
                                      onChanged: (bool value) {
-                                       print(value);
-                                     },
-                                   height: 34,
-                                     animationDuration : const Duration(milliseconds: 400),
-                                     onTap:(){
+                                       _isThinDough = value;
                                        setState(() {
-                                         _dough = dough.ordinary;
+                                         _calcCost();
                                        });
                                      },
-                                     onDoubleTap:(){
-                                       setState(() {
-                                     _dough = dough.thin;
-                                     });
-                                     },
+                                   height: 34,
+                                     animationDuration : const Duration(milliseconds: 200),
+                                     onTap:(){},
+                                     onDoubleTap:(){},
                                      onSwipe:() {},
                                      textOff : "Обычное тесто",
                                      textOn : "Тонкое тесто",
-                                     colorOn : const Color.fromRGBO(0, 0, 0, 0.4),
-                                     colorOff : const Color(0xFFFFFFFF),
+                                     colorOn : const Color(0xFFFFFFFF),
+                                     colorOff : const Color(0xF0FFFFFF),
                                      background : const Color(0xFFECEFF1),
                                      buttonColor : const Color(0xFF0079D0),
-                                     inactiveColor : const Color.fromRGBO(0, 0, 0, 0.4),
+                                     inactiveColor : const Color(0xFF636F7B),
                                    ),
                                ),
                              ),
@@ -135,29 +148,24 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                           ),
                         ),
                         const SizedBox(height: 5,),
-                        Container(
-                          width: 380,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFECEFF1),
-                            borderRadius: BorderRadius.circular(36)),
-                          child: Padding(padding:EdgeInsets.only(top: 25.0),
-                            child: RangeSlider(
-                            values: _currentRangeValues,
-                            max: 60,
-                            divisions: 3,
-                            labels: RangeLabels(
-                              _currentRangeValues.start.round().toString(),
-                              _currentRangeValues.end.round().toString(),
-                            ),
-                            onChanged: (RangeValues values) {
-                            setState(() {
-                            _currentRangeValues = values;
-                            });
-                     },
-                    ),
+                        SizedBox(width: 380,
+                          child: SfSlider(
+                              min: 20,
+                              max: 60,
+                              value: _pizzaSize,
+                              interval: 20,
+                              showTicks: true,
+                              showLabels: true,
+                              enableTooltip: false,
+                              minorTicksPerInterval: 0,
+                              stepSize: 20,
+                              onChanged: (dynamic value){
+                                setState(() {
+                                  _pizzaSize=value;
+                                  _calcCost();
+                                });
+                          })
                           ),
-                        ),
                         const SizedBox(height: 10,),
                         const Align(
                           alignment: Alignment.centerLeft,
@@ -283,6 +291,7 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                                   onChanged: (val) {
                                     setState(() {
                                       _checked = !_checked;
+                                      _calcCost();
                                     });
                                   })),
                         ]),
@@ -302,11 +311,18 @@ class _SwitchesScreenState extends State<SwitchesScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                      Container(
-                        width: 380, height: 34,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFECEFF1),
-                        borderRadius: BorderRadius.circular(36)),
+                      SizedBox(
+                        width: 380,
+                        height: 34,
+                        child: Card(
+                          elevation: 0,
+                          color: Theme.of(context).colorScheme.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(36.0)),
+                          child: Text('${_calcCost()} руб.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 24, color: Color(0xFF000000)),),
+                        ),
                       ),
                         const SizedBox(
                           height: 30,
